@@ -1,0 +1,18 @@
+- hosts: all
+  tasks:
+  - name: Install httpd
+    yum: 
+     name: httpd
+     state: latest
+
+
+  - name: Install unzip
+    yum:
+     name: unzip
+     state: latest
+
+  - name: Extract files
+    unarchive:
+       src: https://www.free-css.com/assets/files/free-css-templates/download/page273/savory.zip
+       dest: /var/www/html/
+       remote_src: yes
