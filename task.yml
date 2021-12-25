@@ -17,4 +17,16 @@
        dest: /var/www/html/
        remote_src: yes
 
-testing
+  - name: Create simpe html web page
+    copy:
+	content: "Welcome to the ansible Learning Module"
+        dest: /var/www/html/index.html
+  - name: defining Webserver Name
+    lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        line: ServerName www.vitamin1988.com:80
+        insertafter: "#ServerName"
+  - name: Update its entry in /etc/hosts
+    lineinfile:
+         path: /etc/hosts
+	 line: 191.168.43.19   www.vitamin1988.com
