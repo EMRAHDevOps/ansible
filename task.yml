@@ -1,32 +1,35 @@
-- hosts: all
+- hosts: web1
   tasks:
+
   - name: Install httpd
     yum: 
      name: httpd
      state: latest
 
+  - name: Start httpd
+    systemd:
+     name: httpd
+     enabled: yes
 
-  - name: Install unzip
+  - name: Install wget
     yum:
-     name: unzip
+     name: wget
      state: latest
 
-  - name: Extract files
-    unarchive:
-       src: https://www.free-css.com/assets/files/free-css-templates/download/page273/savory.zip
-       dest: /var/www/html/
-       remote_src: yes
+  - name: Install unzip
+    yum: 
+      name: unzip
+      state: latest 
 
-  - name: Create simpe html web page
-    copy:
-	content: "Welcome to the ansible Learning Module"
-        dest: /var/www/html/index.html
-  - name: defining Webserver Name
-    lineinfile:
-        path: /etc/httpd/conf/httpd.conf
-        line: ServerName www.vitamin1988.com:80
-        insertafter: "#ServerName"
-  - name: Update its entry in /etc/hosts
-    lineinfile:
-         path: /etc/hosts
-	 line: 191.168.43.19   www.vitamin1988.com
+  
+  - name: Download template
+    get_url: 
+     url: https://www.free-css.com/assets/files/free-css-templates/download/page273/corso.zip
+     dest: /tmp/
+
+  
+  - name: Extract corso.zip into /var/www/html
+    unarchive: 
+      src: /tmp/corso.zip
+      dest: /var/www/html
+      remote_src: yes 
