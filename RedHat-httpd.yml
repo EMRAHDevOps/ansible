@@ -1,0 +1,30 @@
+- name: Install httpd
+  yum:
+    name: httpd
+    update_cache: yes
+    state: latest
+
+- name: Start httpd
+  systemd:
+    state: started
+    name: httpd
+    enabled: yes
+
+- name: Install Unzip
+  yum:
+    name: unzip
+    state: latest
+- name: Put SELinux in permissive mode, logging actions that would be blocked.
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: Unarchive a file that needs to be downloaded
+  get_url:
+    url: https://www.free-css.com/assets/files/free-css-templates/download/page274/resto.zip
+    dest: /tmp/
+    remote_src: yes
+
+- name: Extract files
+  shell: mv -f /tmp/resto/*  /var/www/html
+     

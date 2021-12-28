@@ -1,0 +1,5 @@
+- hosts: all
+  tasks: 
+  - name: Install httpd
+    include: "{{ ansible_os_family }}-httpd.yml"
+   
