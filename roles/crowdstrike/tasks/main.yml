@@ -1,0 +1,25 @@
+---
+# tasks file for crowdstrike
+- name: Install Crowdstrike 
+  get_url:
+    url: "{{ artifact_repo_url }}/Crowdstrike/falcon-sensor-{{ crowdstrike_version_build }}.el{{ ansible_distribution_major_version }}.x86_64.rpm"
+    dest: "{{ tmp_dir }}"
+
+
+- name: install Crowdstrike agent
+  shell: "rpm -ivh {{ tmp_dir }}/falcon-sensor-{{ crowdstrike_version_build }}.el{{ ansible_distribution_major_version }}.x86_64.rpm"
+- name: Register instance for crowdstrike agent
+  shell: |
+    /opt/Crowdstrike/falconctl -s --cid={{ crowdstrike_customer_id }}
+    /opt/Crowdstrike/falconctl -s --apd=FALSE
+
+- name: Make sure falcon-sensor service is enable and running
+  service:
+    name: falcon-sensor
+    state: restarted
+    enabled: yes
+
+- name: Clean up Crowdstrike rpm
+  file:
+    path: "{{ tmp_dir }}/falcon-sensor-{{ crowdstrike_version_build }}.el{{ ansible_distribution_major_version }}.x86_64.rpm"
+    state: absent

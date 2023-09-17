@@ -1,0 +1,70 @@
+---
+# tasks file for docker
+- name: install docker
+  yum:
+    name: docker
+    state: latest
+
+- name: Create docker group
+  group:
+      name: docker
+      gid: 169
+      state: present
+
+- name: Create /etc/docker
+  file:
+    path: /etc/docker
+    state: directory
+    group: root
+    owner: root
+    mode: "u+rwx,g+rx,o+rx"
+
+# remove all default public docker registries and add Company's registry
+- name: Configure Docker search registries
+  ini_file:
+    path: /etc/containers/registries.conf
+    section: registries.search
+    option: registries
+    value: "{{ search_registries | union(addl_search_registries) | to_json }}"
+    state: present
+  vars:
+    search_registries: [ "{{ docker_registry }}" ]
+  notify: Restart docker
+
+- name: Configure docker insecure registries
+  ini_file:
+    path: /etc/containers/registries.conf
+    section: registries.insecure
+    option: registries
+    value: "{{ search_registries | union(addl_search_registries) | to_json }}"
+    state: present
+  vars:
+    insecure_registries: []
+  notify: Restart docker
+
+# block all registries - this prevents the user from specifying their own docker registry
+# only allows access to the registries configured in registries.search.
+- name: Block all registries
+  ini_file:
+    path: /etc/containers/registries.conf
+    section: registries.block
+    option: registries
+    value: '["all"]'
+    state: present
+  notify: Restart docker
+
+- name: Start and Enable Docker
+  service:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: Install docker compose
+  get_url:
+    url: "{{ artifact_repo }}/docker/docker-compose-linux-x86_64"
+    dest: /usr/local/bin/docker-compose
+    owner: root
+    group: root
+    mode: 0755
+    force: no
+  when: install_docker_compose

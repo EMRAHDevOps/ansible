@@ -1,0 +1,4 @@
+---
+# vars file for crowdstrike
+crowdstrike_customer_id: 'owiro09u4239u5r2eiprhjhrh2'
+crowdstrike_version_build: 10.55.0-123431

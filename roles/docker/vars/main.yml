@@ -1,0 +1,20 @@
+---
+# vars file for docker
+
+docker_registries:
+  dev: "artifactory.mycompany.com:8443"
+  prod: "artifactory.mycompany.com:8445"
+
+docker_registries_nc:
+  dev: "docker-dev-virtual.artifactory.com"
+  prod: "docker-prod-virtual.artifactory.com"
+
+docker_registry_env_mapping:
+  dev: "{{ docker_registries.dev }}"
+  prod: "{{ docker_registries.prod }}"
+
+docker_registry_env_mapping_nc:
+  dev: "{{ docker_registries_nc.dev }}"
+  prod: "{{ docker_registries_nc.prod }}"
+
+docker_registry: "{{ docker_registry_env_mapping_nc[env_id] if (current_zone in ['reg-dev', 'nc-dev', 'nc-prod']) else docker_registry_env_mapping[env_id] | default(docker_registries.dev)}}"

@@ -1,0 +1,7 @@
+artifact_repo_url: "{{ zone_artifact_repo_url | default('https://artifactory.mycompany.com/repo/linux-thirdparty-local') }}"
+tmp_dir: /var/tmp/
+secrets_dir: "{% if vault_env is defined and vault_env %}/tmp/ansible-vault/{{ vault_env }}{% else %}/run/secrets/tf/{% endif %}"
+current_zone: "{{ lookup('env', 'CURRENT_ZONE') | default('reg-dev') }}"
+proxy_url: "{{ 'dev.mycompany.com:8080' if current_zone == 'nc-ctp' else 'prod.mycompany.com:8080 '}}"
+# splunk_ds_host: "{{ 'dev.mycompany.com' if region == 'us-east-2' else 'prod.mycompany.com' if region == 'us-west-2' }}"
+

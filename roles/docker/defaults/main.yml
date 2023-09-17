@@ -1,0 +1,6 @@
+---
+# defaults file for docker
+install_docker_compose: yes
+addl_search_registries: []
+addl_insecure_registries: []
+addl_daemon_config: []

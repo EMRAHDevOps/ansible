@@ -1,0 +1,13 @@
+---
+# tasks file for kubectl
+- name: kubectl install
+  get_url:
+    url: "{{ artifact_repo_url }}"
+    dest: /usr/bin
+    mode: 0755
+    owner: root
+    group: root
+
+- name: check version being installed
+  shell: "/usr/bin/kubectl version --client"
+  ignore_errors: true

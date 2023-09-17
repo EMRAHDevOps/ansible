@@ -1,0 +1,22 @@
+---
+# tasks file for awscli
+- name: install awscli package
+  unarchive:
+    src: "{{ artifact_repo_url }}/AWS-CLI/awscli-bundlev2.zip"
+    dest: /var/tmp/
+    remote_src: yes
+- name: Install python36
+  yum:
+    name: rh-python36.x86_64
+    state: installed
+
+- name: Install awscli package
+  shell: scl enable rf-python36.x86_64 "/var/tmp/awscli-bundle/install"
+
+- name: test aws cli
+  shell: /usr/local/bin/aws --version
+
+- name: clean up
+  file:
+    path: /var/tmp/awscli-bundle
+    state: absent
