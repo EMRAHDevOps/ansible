@@ -1,0 +1,12 @@
+---
+- hosts: ubuntu
+  become: yes
+
+  vars:
+    firewall_log_dropped_packages: false
+  
+  roles:
+    - geerlingguy.ntp
+    - geerlingguy.firewall
+    - geerlingguy.java
+    - geerlingguy.solr

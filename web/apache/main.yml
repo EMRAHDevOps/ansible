@@ -1,0 +1,16 @@
+---
+- name: Install and configure Apache
+  hosts: ubuntu
+  become: true
+  gather_facts: false
+
+  pre_tasks:
+    - name: Update apt cache if needed
+      apt:
+        update_cache: true
+
+  handlers:
+    - import_tasks: handlers/apache.yml
+
+  tasks:
+    - import_tasks: tasks/apache.yml
